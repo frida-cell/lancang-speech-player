@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>My Research, in Five Minutes | Speech Player</title>
+<style>
+:root {--bg:#f7f6f2;--paper:#fffefa;--ink:#24343e;--secondary:#65727a;--line:#dadfdd;--rust:#a16b51;--rust-soft:#f1e8e1;--navy-soft:#e7edf0;--teal:#456f6d;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,'Segoe UI',Arial,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:950px;margin:0 auto;padding:32px 22px 70px}
+.topline{font-size:11px;text-transform:uppercase;letter-spacing:.19em;color:var(--rust);font-weight:800}
+h1{font-family:Georgia,'Times New Roman',serif;font-weight:500;letter-spacing:-.02em;font-size:clamp(32px,5vw,49px);line-height:1.12;margin:11px 0 8px}
+.subtitle{color:var(--secondary);font-size:14px;line-height:1.6}
+header{padding-bottom:25px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.player{padding:22px;border-radius:17px;background:var(--paper);border:1px solid var(--line);box-shadow:0 8px 28px #24343e0b}
+.player-head{display:flex;gap:20px;align-items:start;justify-content:space-between;margin-bottom:13px}
+.kicker{font-size:11px;font-weight:800;letter-spacing:.09em;color:var(--rust);text-transform:uppercase}
+.now-title{font-size:19px;font-weight:720;margin-top:5px;line-height:1.3}
+.state{font-size:12px;color:var(--secondary);text-align:right;max-width:220px;line-height:1.5}
+.buttons{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:8px}
+button{font:inherit;border:1px solid #cfd8d8;border-radius:10px;padding:11px 12px;background:white;color:var(--ink);cursor:pointer;font-size:13px;font-weight:650;transition:background .15s,border-color .15s}
+button:hover{background:#f4f0eb;border-color:var(--rust)}
+button.main{background:var(--ink);color:white;border-color:var(--ink)}
+button.main:hover{background:#40525d}
+button.stop{color:#8b473c}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #c5a18f;outline-offset:2px}
+.settings{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:20px;align-items:end}
+.settings label{display:block;color:var(--secondary);font-size:12px;font-weight:700;margin-bottom:8px}
+select{width:100%;min-height:42px;background:white;border:1px solid var(--line);border-radius:9px;padding:8px;color:var(--ink);font-size:13px}
+.speed{display:flex;align-items:center;gap:12px}
+input[type=range]{accent-color:var(--rust);width:100%}
+.speedoutput{font-size:13px;color:var(--rust);font-weight:750;width:42px;text-align:right}
+.track{height:5px;margin-top:20px;border-radius:100px;background:#e4e5e1;overflow:hidden}
+.track>span{height:100%;display:block;width:0;background:var(--rust);transition:width .18s}
+.metaline{display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:12px;color:var(--secondary);margin-top:9px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;margin:28px 0 11px}
+.section-heading h2{font-size:16px;margin:0;letter-spacing:.01em}
+.hint{font-size:12px;color:var(--secondary)}
+.deck{display:grid;gap:10px}
+.slide{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:15px 17px;display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:start}
+.slide.selected{background:#fffaf5;border-color:#b88d76;box-shadow:inset 3px 0 var(--rust)}
+.slidenum{font-family:Georgia,'Times New Roman',serif;color:var(--rust);font-size:27px;line-height:1.1}
+.slide h3{font-size:15px;font-weight:750;margin:0 0 9px}
+.slide p{font-size:14px;line-height:1.72;margin:0;white-space:pre-line;color:#34434b}
+.sidebtn{padding:9px 12px;min-width:91px;margin-top:2px}
+.slide time{font-size:11px;color:var(--secondary);display:block;margin-top:8px}
+.details{margin-top:10px}
+.details summary{color:var(--teal);font-size:12px;font-weight:700;cursor:pointer;user-select:none}
+.details p{color:#626b68;font-size:13px;line-height:1.65;margin-top:7px}
+.footer-note{background:var(--navy-soft);border-radius:12px;padding:14px 17px;font-size:12px;color:#3c555c;line-height:1.7;margin-top:21px}
+footer{font-size:11px;color:var(--secondary);text-align:center;margin-top:22px}
+@media(max-width:700px){main{padding:20px 13px 44px}.player{padding:15px}.buttons{grid-template-columns:repeat(3,1fr)}.buttons .main{grid-column:span 2}.settings{grid-template-columns:1fr}.slide{grid-template-columns:35px 1fr;gap:9px;padding:13px}.sidebtn{grid-column:2;justify-self:start;margin:0}.state{text-align:left}.player-head{flex-direction:column;gap:6px}}
+</style>
+</head>
+<body><main>
+<header>
+ <div class="topline">English for Academic Writing / Round 03</div>
+ <h1>My Research, in Five Minutes</h1>
+ <div class="subtitle">Zhang Shuo · English presentation practice<br>Listen to one slide at a time, or practise the full presentation.</div>
+</header>
+<section class="player" aria-label="English audio player">
+ <div class="player-head"><div><div class="kicker">Now playing</div><div class="now-title" id="nowTitle">Slide 01 · Title</div></div><div class="state" id="status" role="status" aria-live="polite">Ready to play</div></div>
+ <div class="buttons">
+  <button class="main" id="all" type="button">▶ Play all</button>
+  <button id="play" type="button">▶ Play slide</button>
+  <button id="pause" type="button">Ⅱ Pause</button>
+  <button id="resume" type="button">▶ Resume</button>
+  <button class="stop" id="stop" type="button">■ Stop</button>
+ </div>
+ <div class="settings"><div><label for="voices">English voice</label><select id="voices"><option>Loading voices…</option></select></div><div><label for="rate">Speaking speed</label><div class="speed"><input id="rate" type="range" min="0.75" max="1.20" value="0.95" step="0.05"><output id="rateValue" class="speedoutput">0.95×</output></div></div></div>
+ <div class="track" aria-hidden="true"><span id="progress"></span></div>
+ <div class="metaline"><span id="counter">0 / 10 completed</span><span id="mode">Single-slide or continuous playback</span></div>
+</section>
+<div class="section-heading"><h2>Speaking script · by PPT slide</h2><span class="hint">Click ▶ to listen</span></div>
+<div class="deck" id="deck"></div>
+<div class="footer-note"><strong>Note:</strong> This player uses your browser's built-in text-to-speech voices, not a prerecorded human narration. Accent and pronunciation of place names can vary. All English passages are taken from the uploaded Word file; the playback text is not rewritten. No API key is needed.</div>
+<footer>Locally stored HTML · The document text is included in this file.</footer>
+</main>
+<script>
+const slides = [{"n": 1, "title": "Title", "time": "17 s", "en": "Good morning. I'm Zhang Shuo. Today I'll present my master's research on traditional dwellings along the Lancang River Corridor, focusing on the Diqing–Dali section in northwestern Yunnan.", "zh": "大家早上好。我是张硕。今天我将介绍我的硕士研究：澜沧江走廊传统民居的特征组构与交融机制，研究重点是滇西北迪庆—大理段。", "cue": "Name · full thesis topic · Diqing–Dali"}, {"n": 2, "title": "Research Background and Objectives", "time": "32 s", "en": "The region is home to many ethnic groups with different building traditions. Long-term contact may also have led to shared features. While previous studies often described each group's architecture separately, my research looks at the connections between them. The research goals are to document building features, compare similarities and differences, and consider what they suggest about ethnic interaction.", "zh": "这一地区居住着多个民族，拥有不同的营造传统。长期共居与交流也可能使民居形成一些共同特征。以往研究通常分别描述各民族建筑，而我的研究关注它们之间的联系。研究目标是记录建筑特征、比较异同，并讨论这些格局对于理解民族交往交流交融意味着什么。", "cue": "Multi-ethnic corridor · beyond separate ethnic descriptions · three objectives"}, {"n": 3, "title": "Study Area and Fieldwork", "time": "35 s", "en": "The study covers six counties and ten ethnic groups. The data comes from 57 settlements: \n39 I surveyed myself and 18 surveyed earlier by our team. We collected photographs, observations, interviews, and measured drawings.", "zh": "研究覆盖六个县、十个民族，资料来自57个聚落。我实地调查了其中39个，另外18个来自课题组以前的调查。我们收集了建筑照片、现场观察记录、访谈资料和测绘资料。", "cue": "Six counties · ten groups · 57 settlements / 58 records · 39 + 18"}, {"n": 4, "title": "Analytical Framework", "time": "36 s", "en": "The dwellings have three basic structural forms. To compare them, I used the same framework for every settlement. I examined how homes are built, how spaces are arranged, and how culture is expressed. These three aspects were divided into twelve elements and forty-five building practices. This makes comparison possible across different buildings.", "zh": "研究区民居涉及三类基本建造原型。为了比较不同民居，我用同一套框架描述每个聚落，主要考察建筑如何建造、空间如何组织，以及文化如何在建筑中表达。这三个方面进一步细化为12项要素和45项具体建筑做法，让不同形式的民居能够进行统一比较。", "cue": "Three prototypes · three dimensions · 12 elements / 45 practices"}, {"n": 5, "title": "Research Methods", "time": "34 s", "en": "For each settlement, I recorded which of the forty-five practices appeared, creating a checklist. I then compared these lists across ethnic groups and grouped settlements with similar features into architectural types. Finally, I mapped the types to see where they occur. Ethnic identity helps explain the results, but does not define the types.", "zh": "对于每个聚落，我先记录45项做法中哪些实际出现，把调查资料整理成一份清单。然后比较不同民族的清单，并将做法组合相近的聚落归为相应建筑类型。最后把类型标注在地图上，观察它们的分布。民族属性用于解释结果，而不决定类型划分。", "cue": "45-practice checklist · ethnic comparison · architectural types · GIS"}, {"n": 6, "title": "Finding One: Ethnic Similarity", "time": "32 s", "en": "The first finding is that some ethnic groups share more building practices than others. Blang and Yi dwellings are especially similar. We also see strong similarities between Nu and Han, and between Lisu and Tibetan. So building practices do not always follow ethnic boundaries.", "zh": "第一项发现是，各民族民居共享建筑做法的程度并不相同。布朗族与彝族民居尤其相似，怒族与汉族、傈僳族与藏族之间也表现出较强的相似性。因此，建筑做法并不总是与民族边界一致。", "cue": "shared practices · Blang–Yi · Nu–Han · Lisu–Tibetan"}, {"n": 7, "title": "Finding Two: Architectural Types", "time": "34 s", "en": "Next, the analysis identified three main architectural types and eight smaller types. Seven of the eight include settlements from more than one ethnic group. One ethnic group can also have several types. So architectural diversity exists both across ethnic groups and within them.", "zh": "接下来，研究识别出三个一级建筑类型和八个末级类型。其中七个类型包含两个及以上民族的聚落。同一民族内部也可能出现多种建筑类型。这说明建筑多样性既存在于不同民族之间，也存在于民族内部。", "cue": "3 primary · 8 final · 7 cross-ethnic · 53/58 records"}, {"n": 8, "title": "Finding Three: Spatial Patterns", "time": "31 s", "en": "The maps show where the types are found. Type One is mainly in the north, Type Two in the middle-northern part, and Type Three farther south.", "zh": "地图展示了这些建筑类型的分布。类1主要在北部，类2主要在中北段，类3更多分布在南部。", "cue": "North · middle-north · middle-south · local overlap"}, {"n": 9, "title": "Interpretation and Significance", "time": "40 s", "en": "Finally, we have confirmed that these similarities reflect shared living needs and long-term contact. People facing similar conditions so build in similar ways, and building ideas can also spread. Overall, our research offers a consistent way to compare traditional dwellings and understand ethnic interaction. It also highlights the need to protect shared building knowledge and local differences.", "zh": "最后，这些共同特征可能与相似的居住需求和长期民族接触有关。面对类似生活条件的人群可能采用相近的建造方式，营造观念也可能在群体间传播。总体来看，研究为传统民居提供了一种统一的比较方法，也有助于从建筑角度理解民族互动，并提示保护工作应同时关注共有的营造知识与地方差异。", "cue": "possible explanations · shared needs · contact · conservation"}, {"n": 10, "title": "Thank You", "time": "9 s", "en": "Thanks for listening.", "zh": "", "cue": ""}];
+const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+const el = id => document.getElementById(id);
+let voices = [], index = 0, continuous = false, token = 0, currentUtterance = null, completed = new Set(), running = false;
+function status(message){el('status').textContent=message}
+function selectedVoice(){const i=Number(el('voices').value);return voices[i]||null}
+function update(){
+  const s=slides[index];el('nowTitle').textContent='Slide '+String(s.n).padStart(2,'0')+' · '+s.title;
+  el('counter').textContent=completed.size+' / '+slides.length+' completed';
+  el('progress').style.width=(completed.size/slides.length*100)+'%';
+  el('mode').textContent=continuous?'Continuous playback':'Single-slide playback';
+  document.querySelectorAll('.slide').forEach((card,i)=>card.classList.toggle('selected',i===index));
+}
+function populate(){
+  let options = synth ? synth.getVoices().filter(v=>/^en[-_]?/i.test(v.lang)) : [];
+  const old = selectedVoice();
+  voices=options;
+  const select=el('voices');select.replaceChildren();
+  if(!options.length){
+    const opt=document.createElement('option');opt.textContent=synth?'Device default (English)':'Voice playback unavailable';opt.value='';select.appendChild(opt);return;
+  }
+  options.forEach((v,i)=>{let opt=document.createElement('option');opt.value=String(i);opt.textContent=v.name+' · '+v.lang;select.appendChild(opt)});
+  let best=old?options.findIndex(v=>v.voiceURI===old.voiceURI):-1;
+  if(best<0) best=options.findIndex(v=>/^en-US$/i.test(v.lang)&&/natural|online|enhanced|neural|google|microsoft/i.test(v.name));
+  if(best<0) best=options.findIndex(v=>/^en-US$/i.test(v.lang));
+  if(best<0) best=options.findIndex(v=>/^en-GB$/i.test(v.lang));
+  select.value=String(best<0?0:best);
+}
+function render(){
+  const deck=el('deck');deck.replaceChildren();
+  slides.forEach((s,i)=>{
+    let article=document.createElement('article');article.className='slide';
+    const number=document.createElement('div');number.className='slidenum';number.textContent=String(s.n).padStart(2,'0');
+    const content=document.createElement('div');
+    const h=document.createElement('h3');h.textContent=s.title;
+    const p=document.createElement('p');p.textContent=s.en;
+    const tm=document.createElement('time');tm.textContent='Original speaking-time note: '+s.time;
+    const details=document.createElement('details');details.className='details';
+    const summary=document.createElement('summary');summary.textContent='中文参考';
+    const zh=document.createElement('p');zh.textContent=s.zh;
+    details.append(summary,zh);content.append(h,p,tm,details);
+    const btn=document.createElement('button');btn.type='button';btn.className='sidebtn';btn.textContent='▶ Play';btn.setAttribute('aria-label','Play slide '+s.n);
+    btn.addEventListener('click',()=>start(i,false));
+    article.append(number,content,btn);deck.appendChild(article);
+  });update();
+}
+function stop(){
+  token++;continuous=false;running=false;currentUtterance=null;
+  if(synth)synth.cancel();
+  status('Stopped');update();
+}
+function start(i,all){
+  if(!synth){status('Speech is not supported in this browser. Try Chrome, Edge or Safari.');return}
+  token++;synth.cancel();index=i;continuous=all;running=true;update();
+  speak(token);
+}
+function speak(id){
+  if(!synth || id!==token)return;
+  const s=slides[index];
+  const u=new SpeechSynthesisUtterance(s.en.replace(/\s+/g,' ').trim());
+  const voice=selectedVoice();
+  if(voice){u.voice=voice;u.lang=voice.lang}else u.lang='en-US';
+  u.rate=Number(el('rate').value);u.pitch=1;u.volume=1;
+  currentUtterance=u;
+  u.onstart=()=>{if(id===token)status('Playing slide '+s.n)};
+  u.onend=()=>{
+    if(id!==token)return;
+    completed.add(index);running=false;update();
+    if(continuous && index<slides.length-1){index++;running=true;update();speak(id)}
+    else {continuous=false;status(index===slides.length-1?'Presentation finished':'Slide '+s.n+' finished');update()}
+  };
+  u.onerror=e=>{
+    if(id!==token||e.error==='canceled'||e.error==='interrupted')return;
+    running=false;continuous=false;status('Playback error: try a different voice or browser.');update();
+  };
+  // Keep each slide in a separate utterance, making resume and continuous play more reliable.
+  synth.speak(u);
+}
+el('all').addEventListener('click',()=>{completed.clear();start(0,true)});
+el('play').addEventListener('click',()=>start(index,false));
+el('pause').addEventListener('click',()=>{if(synth&&synth.speaking&&!synth.paused){synth.pause();status('Paused at slide '+slides[index].n)}});
+el('resume').addEventListener('click',()=>{if(synth&&synth.paused){synth.resume();status('Playing slide '+slides[index].n)}else if(!running){start(index,continuous)}});
+el('stop').addEventListener('click',stop);
+el('rate').addEventListener('input',e=>el('rateValue').textContent=Number(e.target.value).toFixed(2)+'×');
+el('voices').addEventListener('change',()=>{if(running)start(index,continuous)});
+if(synth){populate();synth.addEventListener?.('voiceschanged',populate);synth.onvoiceschanged=populate}else{populate();status('Your browser does not support voice playback. Try Chrome or Edge.')}
+render();
+</script></body></html>
